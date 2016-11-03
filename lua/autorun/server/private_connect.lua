@@ -52,13 +52,13 @@ if ULib then
 	end
 end
 
-hook.Add("CheckPassword", "private_connect", function(steamID64, ipAddress, svPassword, clPassword, name)
+hook.Add("CheckPassword", "private_connect", function(steamid64, ip, sv_pwd, cl_pwd, name)
 	if api_key:GetString() == "" then return end
 
-	local steamid = util.SteamIDFrom64(steamID64)
+	local steamid = util.SteamIDFrom64(steamid64)
 
-	if svPassword ~= "" and svPassword == clPassword then
-		print(name, steamID64, ipAddress, "Valid Password")
+	if sv_pwd ~= "" and sv_pwd == cl_pwd then
+		print(name, steamid64, ip, "Valid Password")
 		return true
 	end
 
@@ -69,26 +69,26 @@ hook.Add("CheckPassword", "private_connect", function(steamID64, ipAddress, svPa
 			local group = ulx_info.group
 
 			if ulx_check_access(group, "private_connect") then
-				print(name, steamID64, ipAddress, "Has Access")
+				print(name, steamid64, ip, "Has Access")
 				return true
 			end
 		end
 	end
 
-	if steamID64 == server_owner:GetString() then
-		print(name, steamID64, ipAddress, "Is Owner")
+	if steamid64 == server_owner:GetString() then
+		print(name, steamid64, ip, "Is Owner")
 		return true
 	end
 
 	for k,v in pairs(players_friend) do
-		if v[steamID64] then
-			print(name, steamID64, ipAddress, "Is Friend With", k)
+		if v[steamid64] then
+			print(name, steamid64, ip, "Is Friend With", k)
 			return true
 		end
 	end
 
-	print(name, steamID64, ipAddress, "Access denied")
-	PrintMessage(HUD_PRINTTALK, name .. " try to connect.")
+	print(name, steamid64, ip, "Access denied")
+	PrintMessage(HUD_PRINTTALK, name .. " tried to connect.")
 	return false, "Access denied."
 end)
 
